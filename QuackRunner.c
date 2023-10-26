@@ -2,8 +2,15 @@
 #include <stdlib.h>
 #include <time.h>
 
+void segundaTela()
+{
+    return DrawRectangle(0.0f, 0.0f, 1920.0f, 1080.0f, RED);
+}
+
+
 main(){
-    InitWindow(1600,900, "Police Runner");
+    
+    InitWindow(1600,900, "Quack Runner");
     SetTargetFPS(60);
     
     
@@ -27,16 +34,51 @@ main(){
     
     Texture2D ovo = LoadTexture("./ovo.png");
     Texture2D pato = LoadTexture("./pato.png");
+    
+    Texture2D patoCosta1 = LoadTexture("./pato1.png");
+    Texture2D patoCosta2 = LoadTexture("./pato2.png");
+    
+    
     Vector2 posiPlayer = {400, 300};
     int veloPato = 15;
     
+    int contadorPatoCosta = 0;
     
     while(!WindowShouldClose()){
-      
+        
+        bool nenhumaTeclaPressionada = true;
+
+        for (int key = 0; key < 64; key++)
+        {
+            if (IsKeyDown(key))
+            {
+                nenhumaTeclaPressionada = false;
+                break;
+            }
+        }
+
+        if (nenhumaTeclaPressionada)
+        {
+            DrawTextureEx(pato, posiPlayer, 1, 10 , WHITE);
+        }
+        
         
         if(IsKeyDown(KEY_D)) {
-            posiPlayer.x +=veloPato;
+            posiPlayer.x += veloPato;
+
+            if (contadorPatoCosta < 50) {
+                DrawTextureEx(patoCosta1, posiPlayer, 0, 0.5, WHITE);
+            } else if (contadorPatoCosta < 100) {
+                DrawTextureEx(patoCosta2, posiPlayer, 0, 0.09, WHITE);
+            } else {
+                contadorPatoCosta = 0;
+            }
+           
+            
         }
+        
+        
+        contadorPatoCosta += 1;
         
         if(IsKeyDown(KEY_A)) {
             posiPlayer.x -=veloPato;
@@ -220,14 +262,14 @@ main(){
             
            
             //##DESENHO PATO##//
-            DrawTextureEx(pato, posiPlayer, 0, 10.0, WHITE);
+            
             Rectangle colisaoPato = {posiPlayer.x + 10, posiPlayer.y + 10, 50, 50};
             //################//
             
             //##CHECAR COLISOES##// 
             if(CheckCollisionRecs(colisaoPato, colisaoInimigo1) == true || CheckCollisionRecs(colisaoPato, colisaoInimigo2) == true || CheckCollisionRecs(colisaoPato, colisaoInimigo3) == true || CheckCollisionRecs(colisaoPato, colisaoInimigo4) == true){
                 DrawText("COLIDIU COM VERMELHO", 100, 100, 20, RED);
-                CloseWindow();
+                //CloseWindow();
             }
             
             if(CheckCollisionRecs(colisaoOvo, colisaoInimigo1) == true){
@@ -249,10 +291,11 @@ main(){
             
             //###################//
             
-            
         EndDrawing();
         
     }
     CloseWindow();
 }
+
+
 
