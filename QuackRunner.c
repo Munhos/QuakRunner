@@ -4,13 +4,11 @@
 
 void segundaTela()
 {
-    return DrawRectangle(0.0f, 0.0f, 1920.0f, 1080.0f, RED);
+    DrawRectangle(0.0f, 0.0f, 1920.0f, 1080.0f, RED);
 }
 
-
-main(){
+void jogoFaseUm(){
     
-    InitWindow(1600,900, "Quack Runner");
     SetTargetFPS(60);
     
     
@@ -43,7 +41,6 @@ main(){
     int veloPato = 15;
     
     int contadorPatoCosta = 0;
-    
     while(!WindowShouldClose()){
         
         bool nenhumaTeclaPressionada = true;
@@ -292,10 +289,34 @@ main(){
             //###################//
             
         EndDrawing();
-        
     }
     CloseWindow();
 }
 
+
+
+int main(void) {
+
+    InitWindow(1600, 900, "QuackRunner");
+
+    while (!WindowShouldClose()) {
+        
+        if(IsKeyPressed(KEY_D)) {
+            
+           jogoFaseUm();
+            
+        }
+        
+        BeginDrawing();
+            char nome[50] = "PRECIONE D";
+            DrawText(nome,10,10,24,RED);
+            ClearBackground(RAYWHITE);
+        EndDrawing();
+    }
+
+    CloseWindow();
+
+    return 0;
+}
 
 
