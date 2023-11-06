@@ -7,7 +7,9 @@ void segundaTela()
     DrawRectangle(0.0f, 0.0f, 1920.0f, 1080.0f, RED);
 }
 
-void jogoFaseUm(){
+
+
+void faseGeralJogo(){
     
     SetTargetFPS(60);
     
@@ -44,7 +46,7 @@ void jogoFaseUm(){
     while(!WindowShouldClose()){
         
         bool nenhumaTeclaPressionada = true;
-
+        
         for (int key = 0; key < 64; key++)
         {
             if (IsKeyDown(key))
@@ -287,36 +289,97 @@ void jogoFaseUm(){
             
             
             //###################//
-            
         EndDrawing();
+        
     }
     CloseWindow();
 }
 
 
 
-int main(void) {
+
+int main() {
 
     InitWindow(1600, 900, "QuackRunner");
 
     while (!WindowShouldClose()) {
         
-        if(IsKeyPressed(KEY_D)) {
-            
-           jogoFaseUm();
-            
-        }
-        
-        BeginDrawing();
-            char nome[50] = "PRECIONE D";
-            DrawText(nome,10,10,24,RED);
-            ClearBackground(RAYWHITE);
-        EndDrawing();
+        telaInicial();
     }
 
     CloseWindow();
 
     return 0;
+}
+
+void telaInicial(){
+    while (!WindowShouldClose()) {
+        
+        if(IsKeyPressed(KEY_KP_1) || IsKeyPressed(KEY_ONE)) {
+            
+           menuFases();
+            
+        }
+        
+        BeginDrawing();
+            DrawRectangle(0,0,1600,900,BLACK);
+            DrawText("=======================================================================================", 0, 330, 30, WHITE);
+                DrawText("1  - Jogar", 560, 380, 30, LIGHTGRAY);
+                DrawText("2  - Créditos", 560, 420, 30, LIGHTGRAY);
+                DrawText("3  - Sair", 560, 460, 30, LIGHTGRAY);
+                DrawText("=======================================================================================", 0, 510, 30, WHITE);
+
+        EndDrawing();
+    }
+
+    CloseWindow();
+}
+
+void menuFases(){    //CRIAÇÃO FRONT END DO MENU DE FASES
+    while (!WindowShouldClose()) {
+        
+        
+        
+        BeginDrawing();
+            
+            DrawRectangle(0,0,1600,900,BLACK);
+                
+                DrawRectangle(400, 100, 200, 200, GREEN);
+                DrawRectangle(700, 100, 200, 200, GREEN);
+                DrawRectangle(1000, 100, 200, 200, GREEN);
+                DrawText("FASE 1 - PRESSIONE 1", 560, 380, 30, LIGHTGRAY);
+                DrawText("FASE 2 - PRESSIONE 2", 560, 420, 30, LIGHTGRAY);
+                DrawText("FASE 3 - PRESSIONE 3", 560, 460, 30, LIGHTGRAY);
+                DrawText("VOLTAR - PRESSIONE V", 560, 540, 30, LIGHTGRAY);
+                
+
+        EndDrawing();
+        
+        if(IsKeyPressed(KEY_KP_1) || IsKeyPressed(KEY_ONE)) {
+            
+           faseGeralJogo();
+            
+        }
+        
+        if(IsKeyPressed(KEY_KP_2) || IsKeyPressed(KEY_TWO)) {
+            
+           faseGeralJogo();
+            
+        }
+        
+        if(IsKeyPressed(KEY_KP_3) || IsKeyPressed(KEY_THREE)) {
+            
+           faseGeralJogo();
+            
+        }
+        
+        if(IsKeyPressed(KEY_V)) {
+            
+           telaInicial();
+            
+        }
+    }
+
 }
 
 
