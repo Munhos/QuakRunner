@@ -35,15 +35,54 @@ void faseGeralJogo(){
     Texture2D ovo = LoadTexture("./ovo.png");
     Texture2D pato = LoadTexture("./pato.png");
     
-    Texture2D patoCosta1 = LoadTexture("./pato1.png");
-    Texture2D patoCosta2 = LoadTexture("./pato2.png");
+    //--TEXTURA PATO
+    Texture2D patoCosta1 = LoadTexture("./pato_andando_a.png");
+    Texture2D patoCosta2 = LoadTexture("./pato_andando_b.png");
+    Texture2D patoAtirando = LoadTexture("./pato_atirando.png");
+    Texture2D patoParado = LoadTexture("./pato_parado.png");
+    
+    //--TEXTURA INIMIGOS--
+    //-AGUIA
+    Texture2D aguia1 = LoadTexture("./aguia_voando_a.png");
+    Texture2D aguia2 = LoadTexture("./aguia_voando_b.png");
+    int constadorAguia = 0;
+    //-COBRA
+    Texture2D cobra1 = LoadTexture("./cobra_andando_a.png");
+    Texture2D cobra2 = LoadTexture("./cobra_andando_b.png");
+    int constadorCobra = 0;
+    //-GUAXINIM-
+    Texture2D guaxinim1 = LoadTexture("./guaxinim_andando_a.png");
+    Texture2D guaxinim2 = LoadTexture("./guaxinim_andando_b.png");
+    int constadorGuaxinim = 0;
+    
+    Texture2D fundo = LoadTexture("./fundo.png");
     
     
     Vector2 posiPlayer = {400, 300};
-    int veloPato = 15;
+    int veloPato = 8;
+    
+    int posiFundo1 = 0;
+    int posiFundo2 = 1600;
+    
+    int pontuacao = 0;
     
     int contadorPatoCosta = 0;
     while(!WindowShouldClose()){
+        
+        
+        //DESENHO FUNDO-------------
+        
+        DrawTexture(fundo, posiFundo1 -= veloPato, 0, WHITE);
+        if(posiFundo1 < -1600){
+            posiFundo1 = 0;
+        }
+        DrawTexture(fundo, posiFundo2 -= veloPato, 0, WHITE);
+        if(posiFundo2 < 0){
+            posiFundo2 = 1600;
+        }
+        
+        
+        //--------------------------
         
         bool nenhumaTeclaPressionada = true;
         
@@ -54,21 +93,28 @@ void faseGeralJogo(){
                 nenhumaTeclaPressionada = false;
                 break;
             }
+            
+            if (IsKeyDown(KEY_D)) {
+                nenhumaTeclaPressionada = false;
+                break;
+            }
+            
+         
         }
 
         if (nenhumaTeclaPressionada)
         {
-            DrawTextureEx(pato, posiPlayer, 1, 10 , WHITE);
+            DrawTextureEx(patoParado, posiPlayer, 0, 0.08 , WHITE);
         }
         
         
         if(IsKeyDown(KEY_D)) {
             posiPlayer.x += veloPato;
 
-            if (contadorPatoCosta < 50) {
-                DrawTextureEx(patoCosta1, posiPlayer, 0, 0.5, WHITE);
-            } else if (contadorPatoCosta < 100) {
-                DrawTextureEx(patoCosta2, posiPlayer, 0, 0.09, WHITE);
+            if (contadorPatoCosta < 25) {
+                DrawTextureEx(patoCosta1, posiPlayer, 0, 0.08, WHITE);
+            } else if (contadorPatoCosta < 50) {
+                DrawTextureEx(patoCosta2, posiPlayer, 0, 0.08, WHITE);
             } else {
                 contadorPatoCosta = 0;
             }
@@ -123,6 +169,10 @@ void faseGeralJogo(){
             atirar = true;
 
         }
+        
+        if(IsKeyDown(KEY_SPACE)){
+            DrawTextureEx(patoAtirando, posiPlayer, 0, 0.08, WHITE);
+        }
         //##############//
         
         
@@ -173,6 +223,10 @@ void faseGeralJogo(){
         //IMAGENS
         
         BeginDrawing();  
+            pontuacao += 1;
+            char pontuacaoStr[50];
+            sprintf(pontuacaoStr, "%d", pontuacao);
+            DrawText(pontuacaoStr, 10, 10, 50, WHITE);
         
             ClearBackground(BLACK); 
             
@@ -180,7 +234,15 @@ void faseGeralJogo(){
             if (gerarInimigo == true){
                 
                 
-                DrawRectangle(posInimigoX, posInimigo, 30,30,RED);
+                Vector2 posInimigoAguia = {posInimigoX, posInimigo};
+                constadorAguia += 1;
+                if (constadorAguia < 15) {
+                    DrawTextureEx(aguia1, posInimigoAguia, 0, 0.1, WHITE);
+                } else if (constadorAguia < 30) {
+                    DrawTextureEx(aguia2, posInimigoAguia, 0, 0.1, WHITE);
+                } else {
+                    constadorAguia = 0;
+                }
                 
                 if(posInimigoX >=0){
                     posInimigoX -= 20;  //VELOCIDADE INIMIGO'
@@ -194,13 +256,20 @@ void faseGeralJogo(){
             Rectangle colisaoInimigo2 = { posInimigo2X, posInimigo2, 30, 30,};
             if (gerarInimigo2 == true){
                 
-                
-                DrawRectangle(posInimigo2X, posInimigo2, 30,30,BLUE);
+                Vector2 posInimigoCobra = {posInimigo2X, posInimigo2};
+                constadorCobra += 1;
+                if (constadorCobra < 15) {
+                    DrawTextureEx(cobra1, posInimigoCobra, 0, 0.1, WHITE);
+                } else if (constadorCobra < 30) {
+                    DrawTextureEx(cobra2, posInimigoCobra, 0, 0.1, WHITE);
+                } else {
+                    constadorCobra = 0;
+                }
                 
                 if(posInimigo2X >=0){
-                    posInimigo2X -= 30;  //VELOCIDADE INIMIGO
+                    posInimigo2X -= 5;  //VELOCIDADE INIMIGO
                 }else{
-                    gerarInimigo2 = false;
+                    gerarInimigo2= false;
                 }
             }
             
@@ -208,7 +277,21 @@ void faseGeralJogo(){
             if (gerarInimigo3 == true){
                 
                 
-                DrawRectangle(posInimigo3X, posInimigo3, 30,30,YELLOW);
+                Vector2 posInimigoGuaxinim = {posInimigo3X, posInimigo3};
+                constadorGuaxinim += 1;
+                if (constadorGuaxinim < 15) {
+                    DrawTextureEx(guaxinim1, posInimigoGuaxinim, 0, 0.1, WHITE);
+                } else if (constadorGuaxinim < 30) {
+                    DrawTextureEx(guaxinim2, posInimigoGuaxinim, 0, 0.1, WHITE);
+                } else {
+                    constadorGuaxinim = 0;
+                }
+                
+                if(posInimigo2X >=0){
+                    posInimigo2X -= 20;  //VELOCIDADE INIMIGO
+                }else{
+                    gerarInimigo2= false;
+                }
                 
                 if(posInimigo3X >=0){
                     posInimigo3X -= 20;  //VELOCIDADE INIMIGO
@@ -218,7 +301,7 @@ void faseGeralJogo(){
             }
             
             Rectangle colisaoInimigo4 = { posInimigo4X, posInimigo4, 30, 30,};
-            if (gerarInimigo4 == true){
+            /*if (gerarInimigo4 == true){
                 
                  
                 DrawRectangle(posInimigo4X, posInimigo4, 30,30,PURPLE);
@@ -228,7 +311,7 @@ void faseGeralJogo(){
                 }else{
                     gerarInimigo4 = false;
                 }
-            }
+            }*/
             
             
             //##DESENHO OVO##//
@@ -273,18 +356,22 @@ void faseGeralJogo(){
             
             if(CheckCollisionRecs(colisaoOvo, colisaoInimigo1) == true){
                 posInimigoX = 0;
+                posiTiro.x = 1600;
             }
             
             if(CheckCollisionRecs(colisaoOvo, colisaoInimigo2) == true){
                 posInimigo2X = 0;
+                posiTiro.x = 1600;
             }
             
             if(CheckCollisionRecs(colisaoOvo, colisaoInimigo3) == true){
                 posInimigo3X = 0;
+                posiTiro.x = 1600;
             }
             
             if(CheckCollisionRecs(colisaoOvo, colisaoInimigo4) == true){
                 posInimigo4X = 0;
+                posiTiro.x = 1600;
             }
             
             
